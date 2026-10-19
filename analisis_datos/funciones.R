@@ -4,21 +4,15 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 
-# ------------------------------------------------------------------------------
-# 0. PREPARACIÓN Y CONVERSIÓN DE FORMATO (WIDE A LONG)
-# ------------------------------------------------------------------------------
 
-#' Transforma el dataset del FMI a formato largo y limpia fechas
+# PREPARACIÓN Y CONVERSIÓN DE FORMATO (WIDE A LONG)
+#' Transforma el dataset del FMI a formato largo y limpia fechas (para que no ocurran errores tecnicos con algunas funciones)
 #' Excluye las columnas de identificación y los índices agregados al final
 preparar_datos_largos <- function(df_precios) {
-  # Columnas que son índices agregados del FMI (no productos individuales)
-  indices_agregados <- c("general_commodities", "no_energeticos", "alimentos_bebidas", 
-                         "alimentos", "bebidas", "insumos_industriales", 
-                         "agropecuarios_no_comestibles", "metales", "energia", "petroleo")
+  indices_agregados <- c("general_commodities", "no_energeticos", "alimentos_bebidas", "alimentos", "bebidas", "insumos_industriales", "agropecuarios_no_comestibles", "metales", "energia", "petroleo") # Columnas que son índices agregados del FMI (no productos individuales)
   substr
   df_precios %>%
-    # Convertimos indice_tiempo fecha y anio numerico
-    mutate(
+    mutate(                                                  # Convertimos indice_tiempo a fecha y anio numerico
       fecha = as.Date(substr(indice_tiempo, 1, 10)),
       year  = as.numeric(substr(indice_tiempo, 1, 4))
     ) %>%
@@ -36,9 +30,8 @@ preparar_datos_largos <- function(df_precios) {
 }
 
 
-# ------------------------------------------------------------------------------
-# 1. FUNCIONES PARA PREGUNTA 1: CORRELACIONES DE PRECIOS
-# ------------------------------------------------------------------------------
+
+# Funciones para la pregunta 1: Correlaciones de precios
 
 #' Obtiene todos los pares de correlación ordenados de mayor a menor
 extraer_pares_correlacion <- function(df_precios, columnas_productos) {
@@ -51,7 +44,7 @@ extraer_pares_correlacion <- function(df_precios, columnas_productos) {
     arrange(desc(Correlacion))
 }
 
-#' Grafica el mapa de calor para una canasta determinada
+#' Grafica el mapa de calor para las correlaciones de una canasta determinada
 graficar_matriz_correlacion <- function(cor_matrix, titulo) {
   cor_df <- as.data.frame(as.table(cor_matrix))
   colnames(cor_df) <- c("Producto_1", "Producto_2", "Correlacion")
@@ -68,11 +61,9 @@ graficar_matriz_correlacion <- function(cor_matrix, titulo) {
 
 
 
-# ------------------------------------------------------------------------------
-# 2. FUNCIONES PARA PREGUNTA 2: REACCIÓN ANTE CRISIS GLOBALES
-# ------------------------------------------------------------------------------
+# 2. Funciones para la pregunta 2: Reaccion ante crisis globales
 
-#' Calcula el precio promedio anual por producto y su variación interanual (%)
+#' Calcula el precio promedio anual por producto y su variación interanual (en porcentaje)
 calcular_inflacion_anual <- function(df_largo) {
   df_largo %>%
     group_by(producto, year) %>%
@@ -118,9 +109,9 @@ graficar_impacto_crisis <- function(df_crisis, titulo_crisis, n_extremos = 5) {
 }
 
 
-# ------------------------------------------------------------------------------
-# 3. FUNCION PARA PREGUNTA 3: AJUSTE DE FORMATO DE LOS DATOS
-# ------------------------------------------------------------------------------
+
+# Funciones para la pregunta 3: Ajuste de formato de los datos
+
 #' Convierte el dataset de inflación a formato ancho para calcular correlaciones
 preparar_inflacion_ancha <- function(df_inflacion) {
   df_inflacion %>%
@@ -131,9 +122,8 @@ preparar_inflacion_ancha <- function(df_inflacion) {
 }
 
 
-# ------------------------------------------------------------------------------
-# 4. FUNCIONES PARA NUEVAS PREGUNTAS (INFLACIÓN Y PERIODOS)
-# ------------------------------------------------------------------------------
+
+# Funciones para pregunta 4: Conversion de formato de datos y calculos 
 
 #' Filtra el dataset de precios por un rango de años, promedia y lo pasa a formato ancho
 filtrar_y_ensanchar_precios <- function(df_largo, anio_inicio, anio_fin) {

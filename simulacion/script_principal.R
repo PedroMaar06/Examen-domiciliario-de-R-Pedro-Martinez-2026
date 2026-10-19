@@ -9,13 +9,14 @@ Palos <- c("Espada", "Basto", "Oro", "Copa")
 Numeros <- c(1:7, 10:12)
 Mazo <- expand.grid(Numero = Numeros, Palo = Palos, stringsAsFactors = FALSE)
 
-# 2. Extraer cartas al azar (Repartir) y graficar histograma del valor medio
+# Inciso 2: Extraer cartas al azar (Repartir) y graficar histograma del valor medio
+# La funcion sacar_al_azar es la misma que Repartir, pero para un solo jugador
 
 N_manos <- 10000
 Medias_de_las_manos <- numeric(N_manos)
 
 for (i in 1:N_manos) {
-  Extraccion_Inc2 <- Repartir(Mazo, 1)
+  Extraccion_Inc2 <- sacar_al_azar(Mazo)
   Medias_de_las_manos[i] <- mean(as.numeric(Extraccion_Inc2$Manos$Jugador_1$Numero))  # Calcula la media del valor de la carta
 }
 hist(Medias_de_las_manos, freq = FALSE,

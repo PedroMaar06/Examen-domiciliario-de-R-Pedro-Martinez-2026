@@ -19,10 +19,10 @@ if (file.exists("funciones.R")) {
 Datos_Precios <- read.csv(ruta_csv, check.names = TRUE, na.strings = c("", "NA", "-"))
 
 
-# Transformación a formato largo (tidy) usando la función modular
+# Transformación a formato largo (tidy) usando la función definida para ajustar los datos
 Datos_Largo <- preparar_datos_largos(Datos_Precios)
 
-# Cálculo de series de inflación anual (promedio anual de precios y su variación %)
+# Cálculo de series de inflación anual (promedio anual de precios y su variación porcentual)
 Datos_Inflacion <- calcular_inflacion_anual(Datos_Largo)
 
 
@@ -41,8 +41,12 @@ print(head(Pares_Correlacion, 10))
 cat("\n=== CORRELACIONES POSITIVAS ENTRE SECTORES DISTINTOS (INESPERADAS/ESTRUCTURALES) ===\n")
 print(
   Pares_Correlacion %>% 
-    filter(Producto_1 %in% c("petroleo_brent", "cobre", "mineral_hierro") & 
-             Producto_2 %in% c("poroto_soja", "maiz", "carne_bovina"))
+    filter(
+      (Producto_1 %in% c("petroleo_brent", "cobre", "mineral_hierro") & 
+         Producto_2 %in% c("poroto_soja", "maiz", "carne_bovina")) |
+        (Producto_2 %in% c("petroleo_brent", "cobre", "mineral_hierro") & 
+           Producto_1 %in% c("poroto_soja", "maiz", "carne_bovina"))
+    )
 )
 
 cat("\n=== TOP 10 CORRELACIONES NEGATIVAS (DESACOPLE / SUSTITUCIÓN) ===\n")

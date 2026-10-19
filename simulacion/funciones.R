@@ -18,6 +18,10 @@ Repartir <- function(mazo_actual, n_jugadores) {
   return(list(Manos = Manos_jugadores, Mazo_Restante = mazo_restante))
 }
 
+sacar_al_azar <- function(mazo) {
+  Repartir(mazo, n_jugadores = 1)
+}
+
 # 3. Función contar_tantos
 contar_tantos <- function(mano) {
   valores <- ifelse(mano$Numero >= 10, 0, mano$Numero)    # Las cartas del 1 al 7 valen su número, 10, 11 y 12 valen 0
@@ -72,7 +76,7 @@ simular_truco_6 <- function(mi_mano, mazo_restante, mi_equipo_es_mano = TRUE, N_
   maximos_rivales <- numeric(N_sim) 
   while (simulaciones_validas < N_sim) {
     extraccion <- Repartir(mazo_restante, n_jugadores = 5)              # Repartimos solo a los 5 jugadores restantes desde el mazo sobrante
-    comp1 <- extraccion$Manos$Jugador_1                       # Asignamos las manos de los compañeros (Jugador 1 y 2 de esta extracción)
+    comp1 <- extraccion$Manos$Jugador_1                                 # Asignamos las manos de los compañeros (Jugador 1 y 2 de esta extracción)
     comp2 <- extraccion$Manos$Jugador_2
     tantos_comp1 <- contar_tantos(comp1)
     tantos_comp2 <- contar_tantos(comp2)
@@ -80,7 +84,7 @@ simular_truco_6 <- function(mi_mano, mazo_restante, mi_equipo_es_mano = TRUE, N_
     if (tantos_comp1 < 27 && tantos_comp2 < 27) {                       # Me quedo solo con simulaciones en las que mis compañeros tienen menos de 27 cada uno
       simulaciones_validas <- simulaciones_validas + 1
       
-      riv1 <- extraccion$Manos$Jugador_3                      # Las manos de los 3 rivales (Jugadores 3, 4 y 5)
+      riv1 <- extraccion$Manos$Jugador_3                                # Las manos de los 3 rivales (Jugadores 3, 4 y 5)
       riv2 <- extraccion$Manos$Jugador_4
       riv3 <- extraccion$Manos$Jugador_5
 

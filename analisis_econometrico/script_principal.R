@@ -185,6 +185,7 @@ print("Resumen de la Regresión Simple:")
 print(SummaryDeRegSimple)
 cat("R-cuadrado Simple:", SummaryDeRegSimple$r.squared, "\n")
 
+
 # 2.7 Test de hipótesis:
 # H0: life_expectancy_female = life_expectancy
 # H1: life_expectancy_female > life_expectancy
